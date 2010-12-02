@@ -9,6 +9,8 @@ package HTTP::YARM;
 use strict;
 use warnings;
 
+our $VERSION = '0.0.1';
+
 use HTTP::YARM::Route;
 
 sub new {

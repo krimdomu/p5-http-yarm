@@ -1,0 +1,14 @@
+=pod
+
+HTTP::YARM is a simple request routing module.
+
+=head2 Usage
+
+ use HTTP::YARM;
+
+ my $r = HTTP::YARM->new;
+ $r->route('/')->to(sub { print "Hello World!"; });
+ $r->parse($ENV{'REQUEST_URI'})->execute;
+
+=cut
+
