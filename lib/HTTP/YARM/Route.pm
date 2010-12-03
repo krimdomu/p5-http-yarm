@@ -78,7 +78,7 @@ sub path {
    my $self = shift;
    unless($self->{'parent'}) { return $self->{'route'}; }
 
-   return '/' if($self->is_root);
+   return $self->{'route'} if($self->is_root);
    return ($self->{'parent'}->is_root?'':$self->{'parent'}->path) . $self->{'route'};
 }
 
