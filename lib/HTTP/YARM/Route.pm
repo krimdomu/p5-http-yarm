@@ -26,7 +26,14 @@ sub new {
 
 sub to {
    my $self = shift;
-   $self->{'to'} = shift;
+
+   if(ref($_[0]) eq "CODE") {
+      $self->{'to'} = shift;
+   } elsif($_[0] eq "controller" && $_[2] eq "action") {
+      $self->{'to'} = {@_};
+   } else {
+      # error
+   }
 
    $self;
 }
@@ -49,13 +56,22 @@ sub route {
 sub execute {
    my $self = shift;
 
-   my $call = $self->{'to'};
-
    my @params = ();
    push(@params, $self->{'__scope'}) if(exists $self->{'__scope'});
    push(@params, @{$self->{'__parameter'}});
 
-   return &$call(@params);
+   if(ref($self->{'to'}) eq "CODE") {
+      my $call = $self->{'to'};
+      return &$call(@params);
+   } elsif(ref($self->{'to'}) eq "HASH") {
+      my $class_str = $self->{'to'}->{'controller'};
+      my $func = $self->{'to'}->{'action'};
+      if(ref($func) eq "CODE") {
+         return &$func($class_str->new, @params);
+      } else {
+         return $class_str->new()->$func(@params);
+      }
+   }
 }
 
 sub path {
@@ -83,14 +99,6 @@ sub parse {
 sub is_root {
    my $self = shift;
    return ref($self->{'parent'}) ne 'HTTP::YARM::Route';
-}
-
-sub get_namespace {
-   my $self = shift;
-   if($self->is_root) {
-      return $self->{'parent'}->{'namespace'};
-   }
-   return $self->{'parent'}->get_namespace;
 }
 
 sub get_routes {
