@@ -2,13 +2,20 @@
 
 HTTP::YARM is a simple request routing module.
 
-=head2 Usage
+=head2 Synopsis
 
  use HTTP::YARM;
 
  my $r = HTTP::YARM->new;
  $r->route('/')->to(sub { print "Hello World!"; });
+ my $test_route = $r->route(qr{/test/(\d+)})->to(sub { print "Count: " . $_[0]; });
+
+ $test_route->route(qr{/([a-z]+)})->to(controller => 'MyController', action => 'myaction');
+
+ $test_route->route(qr{/([a-z]+)/(\d+)})->to(controller => 'MyController', action => sub { my($self, $first, $second) = @_; });
+
  $r->parse($ENV{'REQUEST_URI'})->execute;
+
 
 =cut
 
