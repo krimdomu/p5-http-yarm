@@ -16,7 +16,7 @@ use HTTP::YARM::Route;
 sub new {
    my $that = shift;
    my $proto = ref($that) || $that;
-   my $self = {};
+   my $self = { @_ };
 
    bless($self, $proto);
 
@@ -29,7 +29,7 @@ sub route {
    my $self = shift;
    my $route = shift;
 
-   push(@{$self->{'__routes'}}, HTTP::YARM::Route->new(route => $route));
+   push(@{$self->{'__routes'}}, HTTP::YARM::Route->new(route => $route, parent => $self));
 
    $self->{'__routes'}->[-1];
 }

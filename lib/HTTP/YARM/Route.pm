@@ -62,6 +62,7 @@ sub path {
    my $self = shift;
    unless($self->{'parent'}) { return $self->{'route'}; }
 
+   return '/' if($self->is_root);
    return ($self->{'parent'}->is_root?'':$self->{'parent'}->path) . $self->{'route'};
 }
 
@@ -81,8 +82,15 @@ sub parse {
 
 sub is_root {
    my $self = shift;
+   return ref($self->{'parent'}) ne 'HTTP::YARM::Route';
+}
 
-   return ! $self->{'parent'};
+sub get_namespace {
+   my $self = shift;
+   if($self->is_root) {
+      return $self->{'parent'}->{'namespace'};
+   }
+   return $self->{'parent'}->get_namespace;
 }
 
 sub get_routes {
