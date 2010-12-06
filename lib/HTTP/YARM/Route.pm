@@ -38,11 +38,14 @@ sub to {
    $self;
 }
 
-sub scope {
+sub controller {
    my $self = shift;
-   $self->{'__scope'} = shift;
+   $self->{'to'}->{'controller'} if exists $self->{'to'}->{'controller'};
+}
 
-   return $self;
+sub action {
+   my $self = shift;
+   $self->{'to'}->{'action'} if exists $self->{'to'}->{'action'};
 }
 
 sub route {
@@ -55,9 +58,8 @@ sub route {
 
 sub execute {
    my $self = shift;
+   my @params = @_;
 
-   my @params = ();
-   push(@params, $self->{'__scope'}) if(exists $self->{'__scope'});
    push(@params, @{$self->{'__parameter'}});
 
    if(ref($self->{'to'}) eq "CODE") {
