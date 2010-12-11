@@ -52,6 +52,8 @@ sub route {
    my $self = shift;
    my $route = shift;
 
+   return $self->{'route'} unless($route);
+
    push(@{$self->{'__subroutes'}}, ref($self)->new(route => $route, parent => $self));
    $self->{'__subroutes'}->[-1];
 }
