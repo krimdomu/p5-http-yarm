@@ -7,7 +7,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 12;
+use Test::More tests => 14;
 
 use_ok 'HTTP::YARM';
 
@@ -20,6 +20,7 @@ $root->route('/test/(\d+)')->to(sub{ return $_[0]; });
 $r->route('/root')->to(sub { return '/root'; });
 $root->route('/post', method => [qw(post)])->to(sub { return '/post'; });
 $root->route('/post_and_get', method => [qw(post get)])->to(sub { return '/post_and_get'; });
+$root->route('/any', method => [qw(any)])->to(sub { return '/any'; });
 
 ok($r->parse(url => '/')->execute eq 'root');
 ok($r->parse(url => '/test1')->execute eq 'test1');
@@ -34,4 +35,6 @@ ok($r->parse(url => '/post_and_get', method => 'POST')->execute eq '/post_and_ge
 ok($r->parse(url => '/post_and_get', method => 'post')->execute eq '/post_and_get');
 ok($r->parse(url => '/post_and_get', method => 'GET')->execute eq '/post_and_get');
 ok($r->parse(url => '/post_and_get', method => 'get')->execute eq '/post_and_get');
+ok($r->parse(url => '/any', method => 'get')->execute eq '/any');
+ok($r->parse(url => '/any')->execute eq '/any');
 

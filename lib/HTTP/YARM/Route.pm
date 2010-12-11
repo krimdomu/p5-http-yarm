@@ -106,11 +106,10 @@ sub parse {
    my $url  = $p->{'url'};
    my $method = $p->{'method'} || 'any';
 
-   my $path = $self->path;
-
    return undef
-      unless(grep { uc($_) eq uc($method) } @{$self->method});
+      unless(grep { uc($_) eq uc($method) || uc($_) eq 'ANY' } @{$self->method});
 
+   my $path = $self->path;
    my @p;
    if(@p = $url =~ m/^$path$/) {
       @{$self->{'__parameter'}} = @p;
