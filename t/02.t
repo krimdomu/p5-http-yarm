@@ -54,14 +54,14 @@ $r->route('/gui/screen/start')->to(controller => 'TestController', action => 'do
 
 
 
-ok($r->parse('/')->execute eq 'do_test1');
-ok($r->parse('/do_test2')->execute eq 'do_test2');
-ok($r->parse('/do_test3/7')->execute == 7);
-ok($r->parse('/do_test4/777')->execute == 777);
-ok($r->parse('/do_test5/8')->execute == 8);
-ok($r->parse('/do_test6/778')->execute == 778);
-ok($r->parse('/do_test5/779/del')->execute eq "779-del");
-ok($r->parse('/gui/screen/start')->execute eq "do_test7");
+ok($r->parse(url => '/')->execute eq 'do_test1');
+ok($r->parse(url => '/do_test2')->execute eq 'do_test2');
+ok($r->parse(url => '/do_test3/7')->execute == 7);
+ok($r->parse(url => '/do_test4/777')->execute == 777);
+ok($r->parse(url => '/do_test5/8')->execute == 8);
+ok($r->parse(url => '/do_test6/778')->execute == 778);
+ok($r->parse(url => '/do_test5/779/del')->execute eq "779-del");
+ok($r->parse(url => '/gui/screen/start')->execute eq "do_test7");
 
 
 

@@ -14,7 +14,7 @@ HTTP::YARM is a simple request routing module.
 
  $test_route->route(qr{/([a-z]+)/(\d+)})->to(controller => 'MyController', action => sub { my($self, $first, $second) = @_; });
 
- $r->parse($ENV{'REQUEST_URI'})->execute;
+ $r->parse(url => $ENV{'REQUEST_URI'})->execute;
 
 
 =cut

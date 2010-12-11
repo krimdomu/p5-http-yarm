@@ -28,8 +28,13 @@ sub new {
 sub route {
    my $self = shift;
    my $route = shift;
+   my $params = {};
 
-   push(@{$self->{'__routes'}}, HTTP::YARM::Route->new(route => $route, parent => $self));
+   if($#_ > 0) {
+      $params = { @_ };
+   }
+
+   push(@{$self->{'__routes'}}, HTTP::YARM::Route->new(route => $route, parent => $self, %$params));
 
    $self->{'__routes'}->[-1];
 }
@@ -48,10 +53,13 @@ sub get_routes {
 
 sub parse {
    my $self = shift;
-   my $url  = shift;
+   my $p = { @_ };
+   my $url = $p->{'url'};
+   my $method = $p->{'method'} || 'any';
+
    my @routes = $self->get_routes;
 
-   my ($route) = grep { $_->parse($url) } @routes;
+   my ($route) = grep { $_->parse(url => $url, method => $method) } @routes;
 
    return $route;
 }

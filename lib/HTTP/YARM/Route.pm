@@ -21,6 +21,10 @@ sub new {
    $self->{'__subroutes'} = [];
    $self->{'__parameter'} = [];
 
+   unless(exists $self->{'method'}) {
+      $self->{'method'} = ['ANY'];
+   }
+
    return $self;
 }
 
@@ -48,13 +52,23 @@ sub action {
    $self->{'to'}->{'action'} if exists $self->{'to'}->{'action'};
 }
 
+sub method {
+   my $self = shift;
+   $self->{'method'};
+}
+
 sub route {
    my $self = shift;
    my $route = shift;
+   my $params = {};
+
+   if($#_ > 0) {
+      $params = { @_ };
+   }
 
    return $self->{'route'} unless($route);
 
-   push(@{$self->{'__subroutes'}}, ref($self)->new(route => $route, parent => $self));
+   push(@{$self->{'__subroutes'}}, ref($self)->new(route => $route, parent => $self, %$params));
    $self->{'__subroutes'}->[-1];
 }
 
@@ -88,8 +102,14 @@ sub path {
 
 sub parse {
    my $self = shift;
-   my $url  = shift;
+   my $p = { @_ };
+   my $url  = $p->{'url'};
+   my $method = $p->{'method'} || 'any';
+
    my $path = $self->path;
+
+   return undef
+      unless(grep { uc($_) eq uc($method) } @{$self->method});
 
    my @p;
    if(@p = $url =~ m/^$path$/) {
