@@ -25,6 +25,10 @@ sub new {
       $self->{'method'} = ['ANY'];
    }
 
+   unless(ref($self->{'method'})) {
+      $self->{'method'} = [$self->{'method'}];
+   }
+
    return $self;
 }
 
