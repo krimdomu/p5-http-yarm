@@ -96,6 +96,22 @@ sub execute {
    }
 }
 
+sub get_call {
+   my $self = shift;
+
+   if(ref($self->{'to'}) eq "CODE") {
+      return $self->{'to'};
+   } elsif(ref($self->{'to'}) eq "HASH") {
+      my $func = $self->{'to'}->{'action'};
+      return $func;
+   }
+}
+
+sub get_parameter {
+   my $self = shift;
+   return @{$self->{'__parameter'}};
+}
+
 sub path {
    my $self = shift;
    unless($self->{'parent'}) { return $self->{'route'}; }
